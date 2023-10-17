@@ -16,6 +16,9 @@ prost-types = "0.11"
 base64 = "0.13"
 hex-literal = "0.4.1"
 anyhow = "1.0.75"
+ethabi = "18.0.0"
+num-bigint = "0.4.4"
+lazy_static = "1.4.0"
 
 [build-dependencies]
 anyhow = "1.0.75"
