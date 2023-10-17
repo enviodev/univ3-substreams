@@ -1,11 +1,15 @@
 mod pb;
 
 use pb::example::{Contract, Contracts};
+use pb::example::{Swap, Swaps};
 
+use hex_literal::hex;
 use substreams::Hex;
 use substreams_entity_change::pb::entity::EntityChanges;
 use substreams_entity_change::tables::Tables;
 use substreams_ethereum::pb::eth;
+
+// const TRACKED_CONTRACT: [u8; 20] = hex!("0x88e6A0c2dDD26FEEb64F039a2c41296FcB3f5640");
 
 #[substreams::handlers::map]
 fn map_contract(block: eth::v2::Block) -> Result<Contracts, substreams::errors::Error> {
@@ -23,6 +27,31 @@ fn map_contract(block: eth::v2::Block) -> Result<Contracts, substreams::errors::
 
     Ok(Contracts { contracts })
 }
+
+// #[substreams::handlers::map]
+// fn map_swap(block: eth::v2::Block) -> Result<Swaps, substreams::errors::Error> {
+//     let swaps = block
+//     .events::<abi::erc721::events::Transfer>
+//         .calls()
+//         .filter(|view| !view.call.state_reverted)
+//         .filter(|view| view.call.call_type == eth::v2::CallType::Create as i32)
+//         .map(|view| Swap {
+//             id: format!("0x{}", Hex(&view.call.address)),
+//             sender: block.number,
+//             recipient:,
+//             amount0:,
+//             amount1:,
+//             sqrtPriceX96:,
+//             liquidity:,
+//             tick:,
+//             blockNumber:block.number,
+//             blockTimestamp: block.timestamp_seconds().to_string(),
+//             transactionHash: view.call.begin_ordinal,
+//         })
+//         .collect();
+
+//     Ok(Swaps { swaps })
+// }
 
 #[substreams::handlers::map]
 pub fn graph_out(contracts: Contracts) -> Result<EntityChanges, substreams::errors::Error> {
