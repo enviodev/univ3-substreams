@@ -1,9 +1,9 @@
 {
-  "name": "example-substreams-powered-subgraph",
+  "name": "woosungd/substreams-test",
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/graphprotocol/graph-tooling",
+    "url": "https://github.com/Float-Capital/univ3-substreams",
     "directory": "examples/substreams-powered-subgraph"
   },
   "private": true,
@@ -22,3 +22,4 @@
     "@graphprotocol/graph-cli": "0.59.0"
   }
 }
+
