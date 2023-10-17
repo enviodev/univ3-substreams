@@ -2,13 +2,12 @@ mod abi;
 mod pb;
 extern crate lazy_static;
 
-use pb::example::{Contract, Contracts};
 use pb::example::{Swap, Swaps};
 
-use substreams::Hex;
+// use substreams::Hex;
 use substreams_entity_change::pb::entity::EntityChanges;
 use substreams_entity_change::tables::Tables;
-use substreams_ethereum::pb::eth;
+use substreams_ethereum::pb::sf::ethereum::r#type::v2 as eth;
 
 // Contract of the uniswap v3 swap pool converted into a hex array
 const TRACKED_CONTRACT: [u8; 20] = [
@@ -17,25 +16,10 @@ const TRACKED_CONTRACT: [u8; 20] = [
 ];
 
 #[substreams::handlers::map]
-fn map_contract(block: eth::v2::Block) -> Result<Contracts, substreams::errors::Error> {
-    let contracts = block
-        .calls()
-        .filter(|view| !view.call.state_reverted)
-        .filter(|view| view.call.call_type == eth::v2::CallType::Create as i32)
-        .map(|view| Contract {
-            address: format!("0x{}", Hex(&view.call.address)),
-            block_number: block.number,
-            timestamp: block.timestamp_seconds().to_string(),
-            ordinal: view.call.begin_ordinal,
-        })
-        .collect();
-
-    Ok(Contracts { contracts })
-}
-
-#[substreams::handlers::map]
-fn map_swap(block: eth::v2::Block) -> Result<Swaps, substreams::errors::Error> {
-    let swaps: Vec<Swap> = block
+fn map_swap(block: eth::Block) -> Result<Swaps, substreams::errors::Error> {
+    println!("map_swap function called");
+    substreams::log::info!("map_swap function called");
+    let swaps: Vec<_> = block
         .events::<abi::SwapContract::events::Swap>(&[&TRACKED_CONTRACT])
         .map(|(swap, log)| {
             substreams::log::info!("Swap event seen");
@@ -60,6 +44,7 @@ fn map_swap(block: eth::v2::Block) -> Result<Swaps, substreams::errors::Error> {
 
 #[substreams::handlers::map]
 pub fn graph_out(swaps: Swaps) -> Result<EntityChanges, substreams::errors::Error> {
+    println!("graph_out function called");
     // hash map of name to a table
     let mut tables = Tables::new();
 

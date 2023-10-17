@@ -1,12 +1,12 @@
-type Contract @entity {
-  id: ID!
+# type Contract @entity {
+#   id: ID!
 
-  "The timestamp when the contract was deployed"
-  timestamp: String!
+#   "The timestamp when the contract was deployed"
+#   timestamp: String!
 
-  "The block number of the contract deployment"
-  blockNumber: BigInt!
-}
+#   "The block number of the contract deployment"
+#   blockNumber: BigInt!
+# }
 
 type Swap @entity {
   id: ID!
