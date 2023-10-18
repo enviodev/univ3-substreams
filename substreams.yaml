@@ -20,6 +20,7 @@ binaries:
 modules: # specify modules with their inputs and outputs.
   - name: map_swap
     kind: map
+    initialBlock: 12376729
     inputs:
       - source: sf.ethereum.type.v2.Block
     output:
@@ -27,6 +28,7 @@ modules: # specify modules with their inputs and outputs.
 
   - name: graph_out
     kind: map
+    initialBlock: 12376729
     inputs:
       - map: map_swap
     output:

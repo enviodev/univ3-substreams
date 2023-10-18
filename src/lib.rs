@@ -78,9 +78,9 @@ fn map_swap(block: eth::Block) -> Result<Swaps, substreams::errors::Error> {
 
 #[substreams::handlers::map]
 pub fn graph_out(swaps: Swaps) -> Result<EntityChanges, substreams::errors::Error> {
-    println!("graph_out function called");
-    substreams::log::info!("graph_out function called");
-    substreams::log::info!("swaps: {:?}", swaps);
+    // println!("graph_out function called");
+    // substreams::log::info!("graph_out function called");
+    // substreams::log::info!("swaps: {:?}", swaps);
     // hash map of name to a table
     let mut tables = Tables::new();
 
