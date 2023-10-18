@@ -29,4 +29,5 @@ message Swap {
     int64 blockNumber = 9;
     int64 blockTimestamp = 10;
     string transactionHash = 11;
+    uint64 ordinal = 12;
 }

@@ -23,7 +23,7 @@ modules: # specify modules with their inputs and outputs.
     inputs:
       - source: sf.ethereum.type.v2.Block
     output:
-      type: proto:test.Swaps
+      type: proto:example.v1.Swaps # type defined in the example proto file
 
   - name: graph_out
     kind: map

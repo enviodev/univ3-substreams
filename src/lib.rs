@@ -35,6 +35,7 @@ fn map_swap(block: eth::Block) -> Result<Swaps, substreams::errors::Error> {
                 block_number: block.number as i64,
                 block_timestamp: block.timestamp_seconds() as i64,
                 transaction_hash: block.hash.clone().get(0).unwrap().to_string(),
+                ordinal: block.number,
             }
         })
         .collect();
