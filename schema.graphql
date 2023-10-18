@@ -12,12 +12,12 @@ type Swap @entity {
   id: ID!
   sender: String! # address
   recipient: String! # address
-  amount0: BigInt! # int256
-  amount1: BigInt! # int256
-  sqrtPriceX96: BigInt! # uint160
-  liquidity: BigInt! # uint128
-  tick: Int! # int24
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: String!
+  amount0: String! # int256
+  amount1: String! # int256
+  sqrt_price_x96: String! # uint160
+  liquidity: String! # uint128
+  tick: String! # int24
+  block_number: BigInt!
+  block_timestamp: BigInt!
+  transaction_hash: String!
 }

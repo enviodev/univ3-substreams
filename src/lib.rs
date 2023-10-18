@@ -64,7 +64,6 @@ fn map_swap(block: eth::Block) -> Result<Swaps, substreams::errors::Error> {
                     tick: tick_string,
                     block_number: block.number as i64,
                     block_timestamp: block.number as i64,
-                    // block_timestamp: block.header.unwrap().timestamp.unwrap() as i64,
                     transaction_hash: format!("0x{}", hex::encode(block.hash.clone())),
                     ordinal: block.number,
                 };
