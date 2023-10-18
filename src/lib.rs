@@ -9,6 +9,9 @@ use substreams_ethereum::pb::eth;
 
 #[substreams::handlers::map]
 fn map_contract(block: eth::v2::Block) -> Result<Contracts, substreams::errors::Error> {
+    println!("map_contract function called");
+    substreams::log::info!("map_contract function called");
+
     let contracts = block
         .calls()
         .filter(|view| !view.call.state_reverted)
@@ -26,6 +29,9 @@ fn map_contract(block: eth::v2::Block) -> Result<Contracts, substreams::errors::
 
 #[substreams::handlers::map]
 pub fn graph_out(contracts: Contracts) -> Result<EntityChanges, substreams::errors::Error> {
+    println!("graph_out function called");
+    substreams::log::info!("graph_out function called");
+
     // hash map of name to a table
     let mut tables = Tables::new();
 
