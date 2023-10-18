@@ -893,6 +893,7 @@ dependencies = [
  "anyhow",
  "base64",
  "ethabi 18.0.0",
+ "hex",
  "hex-literal 0.4.1",
  "lazy_static",
  "num-bigint",

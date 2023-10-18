@@ -4,25 +4,12 @@ extern crate lazy_static;
 
 use pb::example::{Swap, Swaps};
 
-use hex_literal::hex;
+use substreams::hex;
 use substreams_entity_change::pb::entity::EntityChanges;
 use substreams_entity_change::tables::Tables;
 use substreams_ethereum::pb::sf::ethereum::r#type::v2 as eth;
 
-// Contract of the uniswap v3 swap pool converted into a hex array
-// 0.5% USDC-ETH pool
-const TRACKED_CONTRACT: [u8; 20] = [
-    0x88, 0xe6, 0xA0, 0xc2, 0xdD, 0x26, 0xFE, 0xEb, 0x64, 0xF0, 0x39, 0xa2, 0xc4, 0x12, 0x96, 0xFc,
-    0xB3, 0xf5, 0x64, 0x0,
-];
-
-// 0.3% USDC-ETH pool
-// const TRACKED_CONTRACT: [u8; 20] = [
-//     0x8a, 0xd5, 0x99, 0xc3, 0xa0, 0xff, 0x1d, 0xe0, 0x82, 0x01, 0x1e, 0xfd, 0xdc, 0x58, 0xf1, 0x90,
-//     0x8e, 0xb6, 0xe6, 0xd8,
-// ];
-
-// const TRACKED_CONTRACT: [u8; 20] = hex!("0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8");
+const TRACKED_CONTRACT: [u8; 20] = hex!("88e6A0c2dDD26FEEb64F039a2c41296FcB3f5640");
 
 substreams_ethereum::init!();
 
@@ -30,28 +17,63 @@ substreams_ethereum::init!();
 fn map_swap(block: eth::Block) -> Result<Swaps, substreams::errors::Error> {
     println!("map_swap function called");
     substreams::log::info!("map_swap function called");
-    let swaps: Vec<_> = block
-        .events::<abi::SwapContract::events::Swap>(&[&TRACKED_CONTRACT])
-        .map(|(swap, _log)| {
-            substreams::log::info!("Swap event seen");
-            Swap {
-                id: block.hash.get(0).unwrap().to_string(),
-                sender: swap.sender.get(0).unwrap().to_string(),
-                recipient: swap.recipient.get(0).unwrap().to_string(),
-                amount0: swap.amount0.to_i32() as i64,
-                amount1: swap.amount1.to_i32() as i64,
-                sqrt_price_x96: swap.sqrt_price_x96.to_u64(),
-                liquidity: swap.liquidity.to_u64(),
-                tick: swap.tick.to_i32() as i64,
-                block_number: block.number as i64,
-                block_timestamp: block.timestamp_seconds() as i64,
-                transaction_hash: block.hash.clone().get(0).unwrap().to_string(),
-                ordinal: block.number,
-            }
-        })
-        .collect();
+    Ok(Swaps {
+        swaps: block
+            .events::<abi::SwapContract::events::Swap>(&[&TRACKED_CONTRACT])
+            .map(|(swap, _log)| {
+                substreams::log::info!("Swap {:?}", swap);
+                substreams::log::info!("id {:?}", format!("0x{}", hex::encode(block.hash.clone())));
+                substreams::log::info!(
+                    "sender {:?}",
+                    format!("0x{}", hex::encode(swap.sender.clone()))
+                );
+                substreams::log::info!(
+                    "recipient {:?}",
+                    format!("0x{}", hex::encode(swap.recipient.clone()))
+                );
 
-    Ok(Swaps { swaps })
+                let amount0_string = Into::<String>::into(swap.amount0.clone());
+                substreams::log::info!("amount0 {:?}", amount0_string);
+
+                let amount1_string = Into::<String>::into(swap.amount1.clone());
+                substreams::log::info!("amount1 {:?}", amount1_string);
+
+                let sqrt_price_x96_string = Into::<String>::into(swap.sqrt_price_x96.clone());
+                substreams::log::info!("sqrt_price_x96 {:?}", sqrt_price_x96_string);
+
+                let liquidity_string = Into::<String>::into(swap.liquidity.clone());
+                substreams::log::info!("liquidity {:?}", liquidity_string);
+
+                let tick_string = Into::<String>::into(swap.tick.clone());
+                substreams::log::info!("tick {:?}", tick_string);
+
+                substreams::log::info!("block_number {:?}", block.number);
+                substreams::log::info!(
+                    "Block hash {:?}",
+                    format!("0x{}", hex::encode(block.hash.clone()))
+                );
+                substreams::log::info!("Swap event seen");
+                let swap_instance = Swap {
+                    id: format!("0x{}", hex::encode(block.hash.clone())),
+                    sender: format!("0x{}", hex::encode(swap.sender.clone())),
+                    recipient: format!("0x{}", hex::encode(swap.recipient.clone())),
+                    amount0: amount0_string,
+                    amount1: amount1_string,
+                    sqrt_price_x96: sqrt_price_x96_string,
+                    liquidity: liquidity_string,
+                    tick: tick_string,
+                    block_number: block.number as i64,
+                    block_timestamp: block.number as i64,
+                    // block_timestamp: block.header.unwrap().timestamp.unwrap() as i64,
+                    transaction_hash: format!("0x{}", hex::encode(block.hash.clone())),
+                    ordinal: block.number,
+                };
+
+                substreams::log::info!("Swap event parsed");
+                swap_instance
+            })
+            .collect(),
+    })
 }
 
 #[substreams::handlers::map]

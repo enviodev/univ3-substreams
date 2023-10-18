@@ -18,7 +18,7 @@
     "substreams:protogen": "substreams protogen ./substreams.yaml --exclude-paths='sf/substreams,google'",
     "substreams:stream": "substreams run -e mainnet.eth.streamingfast.io:443 substreams.yaml graph_out --start-block 12376729 --stop-block +50",
     "test": "substreams pack ./substreams.yaml && substreams run -e mainnet.eth.streamingfast.io:443 substreams.yaml graph_out --start-block 17160908 --stop-block +20",
-    "test-wb": "rm -rf ./target && rm -rf ./src/pb && substreams protogen ./substreams.yaml --exclude-paths='sf/substreams,google' && cargo build --target wasm32-unknown-unknown --release && substreams pack ./substreams.yaml && substreams run -e mainnet.eth.streamingfast.io:443 substreams.yaml graph_out --start-block 17160908 --stop-block +20"
+    "test-wb": " substreams protogen ./substreams.yaml --exclude-paths='sf/substreams,google' && cargo build --target wasm32-unknown-unknown --release && substreams pack ./substreams.yaml && substreams run -e mainnet.eth.streamingfast.io:443 substreams.yaml graph_out --start-block 17160908 --stop-block +20"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "0.59.0"

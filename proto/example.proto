@@ -21,11 +21,11 @@ message Swap {
     string id = 1;
     string sender = 2;
     string recipient = 3;
-    int64 amount0 = 4;
-    int64 amount1 = 5;
-    uint64 sqrtPriceX96 = 6;
-    uint64 liquidity = 7;
-    int64 tick = 8;
+    string amount0 = 4;
+    string amount1 = 5;
+    string sqrtPriceX96 = 6;
+    string liquidity = 7;
+    string tick = 8;
     int64 blockNumber = 9;
     int64 blockTimestamp = 10;
     string transactionHash = 11;
